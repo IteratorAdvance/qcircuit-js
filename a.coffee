@@ -283,14 +283,14 @@ drawer.mousemove (event) ->
 
         update_dashed_box(y1, x1, y2, x2)
 
-        if Q.func and Q.func.type == 'add_line'
+        if Q.func and Q.func.type == 'line_preview'
                 if Q.length() == 1
                         [x1, y1] = center Q.Q[0][0], Q.Q[0][1]
                         [x2, y2] = center Bx, By
                         if line_preview
                                 line_preview.remove()
                         line_preview = draw.line(y1, x1, y2, x2)
-                        if x1 == x2 || y1 == y2
+                        if Q.func.test(x1, y1, x2, y2)
                                 color = 'green'
                         else
                                 color = 'red'
@@ -312,6 +312,9 @@ window.add_black_dot = () ->
                 [x2, y2] = arg[1]
                 if y1 == y2
                         QC.add new QCircuit_black_dot x1, y1, x2, y2
+        func.type = 'line_preview'
+        func.test = (x1, y1, x2, y2)->
+                y1 == y2
         Q.bind func, 2
 
 window.add_white_dot = () ->
@@ -320,6 +323,10 @@ window.add_white_dot = () ->
                 [x2, y2] = arg[1]
                 if y1 == y2
                         QC.add new QCircuit_white_dot x1, y1, x2, y2
+        func.type = 'line_preview'
+        func.test = (x1, y1, x2, y2)->
+                y1 == y2
+
         Q.bind func, 2
 
 window.add_targ = () ->
@@ -354,7 +361,10 @@ window.add_line = () ->
                 [x2, y2] = arg[1]
                 if y1 == y2 or x1 == x2
                         QC.add new QCircuit_line x1, y1, x2, y2
-        func.type = 'add_line'
+        func.type = 'line_preview'
+        func.test = (x1, y1, x2, y2)->
+                x1 == x2 or y1 == y2
+
         Q.bind func, 2
 
 class QCircuitGrid
