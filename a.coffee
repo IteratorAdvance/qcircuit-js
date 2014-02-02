@@ -217,6 +217,10 @@ class QueueEvent
                 @Q = []
                 @func = null
                 @cnt = 0
+
+        length: ->
+                @Q.length
+
         push: (args) ->
                 # clog "start #{@Q} #{@Q.length}"
                 clog "push: #{args}"
@@ -242,23 +246,57 @@ get_cur_rel_pos = (event) ->
         y = parseInt(event.pageY) - drawer.position().left
         return [x, y]
 
+
+drawer.get
+
+line_preview = null
+
+update_dashed_box = (x1, y1, x2, y2)->
+        if dashed_box
+                for i in [0...4]
+                        dashed_box[i].remove()
+                dashed_box = null
+        dashed_box = new Array()
+        dashed_box[0] = draw.line(x1, y1, x1, y2)
+        dashed_box[1] = draw.line(x2, y1, x2, y2)
+        dashed_box[2] = draw.line(x1, y1, x2, y1)
+        dashed_box[3] = draw.line(x1, y2, x2, y2)
+        for i in [0...4]
+                dashed_box[i].attr
+                        'stroke': 'black'
+                        "stroke-dasharray": [2, 2]
+                        'fill': 'white'
+                        'fill-opacity': 0 
+
 drawer.mousemove (event) ->
         [x, y] = get_cur_rel_pos event
         $("#mouse-position").text "#{x} #{y}"
         # clog "#{event.clientX} #{event.pageX} #{drawer.position().top} #{drawer.offset().top}"
-        if dashed_box
-                dashed_box.remove()
+
+
         [Bx, By] = locate_mouse x, y
         x1 = X.left(Bx)
         x2 = X.right(Bx)
         y1 = Y.left(By)
         y2 = Y.right(By)
         clog "#{Bx} #{By}"
-        dashed_box = draw.rect(y2 - y1, x2 - x1).move(y1, x1).attr
-                'stroke': 'black'
-                "stroke-dasharray": [2, 2]
-                'fill': 'white'
-                'fill-opacity': 0
+
+        update_dashed_box(y1, x1, y2, x2)
+
+        if Q.func and Q.func.type == 'add_line'
+                if Q.length() == 1
+                        [x1, y1] = center Q.Q[0][0], Q.Q[0][1]
+                        [x2, y2] = center Bx, By
+                        if line_preview
+                                line_preview.remove()
+                        line_preview = draw.line(y1, x1, y2, x2)
+                        if x1 == x2 || y1 == y2
+                                color = 'green'
+                        else
+                                color = 'red'
+                        line_preview.stroke(width: 1, color: color)
+
+
 # clog drawer_dom
 
 drawer.click (event) ->
@@ -316,6 +354,7 @@ window.add_line = () ->
                 [x2, y2] = arg[1]
                 if y1 == y2 or x1 == x2
                         QC.add new QCircuit_line x1, y1, x2, y2
+        func.type = 'add_line'
         Q.bind func, 2
 
 class QCircuitGrid
