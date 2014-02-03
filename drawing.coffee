@@ -118,6 +118,7 @@ class QCircuit_line
                 for x in [x1 .. x2]
                         for y in [y1 .. y2]
                                 map[x][y] += "\\qw "
+                                
 class QCircuit_qswap
         constructor: (@x, @y) ->
                 @type = 'qswap'
@@ -186,15 +187,15 @@ class QCircuit_component
 
 QC = new QCircuit_component
 
-# for c in [
-#         new QCircuit_black_dot(1, 1, 2, 1),
-#         new QCircuit_black_dot(2, 2, 3, 2),
-#         new QCircuit_target(1, 2),
-#         new QCircuit_target(3, 1),
-#         new QCircuit_gate(1, 3, 'U'),
-#         new QCircuit_qswap(4, 1), ]
-#         QC.add c, false
-# QC.redraw()
+#for c in [
+#        new QCircuit_black_dot(1, 1, 2, 1),
+#        new QCircuit_black_dot(2, 2, 3, 2),
+#        new QCircuit_target(1, 2),
+#        new QCircuit_target(3, 1),
+#        new QCircuit_gate(1, 3, 'U'),
+#        new QCircuit_qswap(4, 1), ]
+#        QC.add c, false
+#QC.redraw()
 
 dashed_box = null
 locate_mouse = (x, y) ->
@@ -224,7 +225,7 @@ class QueueEvent
                         # clog "start #{@Q} #{@cnt}"
                         @func(@Q[0 .. @cnt - 1])
                         @Q = []
-                        @func = null
+#                        @func = null
                 #clog "Queue Length #{@Q.length}"
                 $("#QLen").val("#{@Q.length} drd")
         bind: (@func, @cnt) ->

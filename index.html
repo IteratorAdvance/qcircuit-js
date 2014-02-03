@@ -24,7 +24,7 @@
   <body>
   	<div class="container">
 		<div class="container">
-			<div class="header">
+			<div class="bs-header">
 			<ul class="nav nav-pills pull-right">
 				<li class="active"><a href="#">Home</a></li>
 				<li><a href="#">Log in</a></li>
@@ -38,23 +38,28 @@
 			<table id="table"><div id="drawing" left = "100"></div></table>
 			
 			<script type="text/javascript" src="jquery.tableresizer.js"></script>
-			<script type="text/javascript" src="a.js"></script>
+			<script type="text/javascript" src="drawing.js"></script>
 
 		</div>
 		<div class="col-lg-6">
-			<button class="btn btn-default" onclick="cancel_op()">Cancel</button>
-			<button class="btn btn-default" onclick="add_black_dot()">Add Black dot</button>
-			<button class="btn btn-default" onclick="add_white_dot()">Add White dot</button>
-			<button class="btn btn-default" onclick="add_targ()">Add Target</button>
-			<button class="btn btn-default" onclick="add_line()">Add Line</button>
-			<button class="btn btn-default" onclick="add_qswap()">Add Qswap</button>
-			<button class="btn btn-default" onclick="add_gate()">Add Gate</button>
-			<input class="form-control" id="gate"/>
-			<button class="btn btn-default" onclick="add_multigate()">Add MultiGate</button>
-			<button class="btn btn-default" onclick="export_to_latex()">Export to LaTeX</button>
-			<div id="mouse-position">0</div>
-
+			<div class="btn-group">
+				<button class="btn btn-default" onclick="add_black_dot()">Add Black dot</button>
+				<button class="btn btn-default" onclick="add_white_dot()">Add White dot</button>
+				<button class="btn btn-default" onclick="add_targ()">Add Target</button>
+				<button class="btn btn-default" onclick="add_qswap()">Add Qswap</button>
+				<button class="btn btn-default" onclick="add_line()">Add Line</button>
+			</div>
+			<div class="btn-group">
+				<input class="form-control" id="gate" size="20" placeholder="Gate content here" />
+				<button class="btn btn-default" onclick="add_gate()">Add Gate</button>
+				<button class="btn btn-default" onclick="add_multigate()">Add MultiGate</button>
+			</div>
+			<div class="btn-group">
+				<button class="btn btn-danger" onclick="cancel_op()">Cancel</button>
+				<button class="btn btn-success" onclick="export_to_latex()">Export to LaTeX</button>
+			</div>
 			<pre id="latex-code"></pre>
+			<div id="mouse-position">0</div>
 		</div>
 
    </body>
