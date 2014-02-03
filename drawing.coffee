@@ -1,17 +1,15 @@
-draw = SVG('drawing').size(360, 360)
-
 class Axis
         constructor: (@default, cnt) ->
                 @dx = [0]
                 for i in [1 .. cnt]
                         @dx.push @default
                 @sum = (x, y) -> x + y
-                this.upd_xs()
+                @upd_xs()
 
         upd_xs: () ->
                 @last = 0
-                @xs = []
-                @rep = []
+                @xs = new Array()
+                @rep = new Array()
                 cnt = 0
                 for i in @dx
                         for x in [0 .. i - 1]
@@ -19,7 +17,7 @@ class Axis
                         @last += i
                         @xs.push @last
                         cnt += 1
-                        
+                    
         set_default: (@default) ->
 
         set: (col, width) ->
@@ -41,6 +39,8 @@ class Axis
                 return @dx[x] / 2 + @xs[x - 1]
 
         locate: (x) ->
+#                alert(@xs.length)
+                console.log("#{x}, #{@xs.length}")
                 if x >= @last
                         return @xs.length
                 return @rep[x]
@@ -51,10 +51,12 @@ sz_cfg =
         'target': 30
         'qswap': 5
 
-cols = 6
-rows = 6
-X = new Axis 60, rows
-Y = new Axis 60, cols
+gridSize = 60
+cols = 8
+rows = 8
+X = new Axis gridSize, rows
+Y = new Axis gridSize, cols
+draw = SVG('drawing').size(cols * gridSize, rows * gridSize)
 
 center = (x, y) ->
         return [X.center(x), Y.center(y)]
@@ -118,7 +120,7 @@ class QCircuit_line
                 for x in [x1 .. x2]
                         for y in [y1 .. y2]
                                 map[x][y] += "\\qw "
-                                
+
 class QCircuit_qswap
         constructor: (@x, @y) ->
                 @type = 'qswap'
@@ -135,8 +137,8 @@ class QCircuit_qswap
 class QCircuit_gate
         constructor: (@x, @y, @txt) ->
                 @type = 'gate'
-                if @y < @x
-                        [@x, @y] = [@y, @x]
+#                if @y < @x
+#                        [@x, @y] = [@y, @x]
         draw: (svg) ->
                 d = sz_cfg['gate'] / 2
                 [xc, yc] = center @x, @y
@@ -199,7 +201,7 @@ QC = new QCircuit_component
 
 dashed_box = null
 locate_mouse = (x, y) ->
-        return [Y.locate(y), X.locate(x)]
+        return [X.locate(y), Y.locate(x)]
 
 window.cancel_op = () ->
         if QC.components.length == 0
@@ -266,16 +268,14 @@ update_dashed_box = (x1, y1, x2, y2)->
 
 drawer.mousemove (event) ->
         [x, y] = get_cur_rel_pos event
-        $("#mouse-position").text "#{x} #{y}"
         # clog "#{event.clientX} #{event.pageX} #{drawer.position().top} #{drawer.offset().top}"
-
 
         [Bx, By] = locate_mouse x, y
         x1 = X.left(Bx)
         x2 = X.right(Bx)
         y1 = Y.left(By)
         y2 = Y.right(By)
-        #clog "#{Bx} #{By}"
+        $("#mouse-position").text "#{x1} #{x2}"
 
         update_dashed_box(y1, x1, y2, x2)
 
@@ -399,11 +399,11 @@ mk_table = ->
                 h = if i == 0 then rem else X.get(i)
                 s = "<tr height=#{h}px>"
                 for j in [0 .. cols]
-                        elem = if i == 0 then "th" else "td"
+                        elem = if i == 0 then 'th align=center' else "td"
                         style = if j == 0 then 'style="border-right: 2px solid #CCC"' else ""
                         w = if j == 0 then rem else Y.get(j)
                         inner = if (i == 0 and j > 0) or (i > 0 and j == 0) then i + j else ""
-                        s += "<#{elem} width=#{w}px #{style}> #{inner} </#{elem}>"
+                        s += "<#{elem} width=#{w}px #{style}> #{inner}</#{elem}>"
                 s += '</tr>'
                 tab.append(s)
 
