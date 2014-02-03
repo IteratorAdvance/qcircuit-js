@@ -242,8 +242,8 @@ Q = new QueueEvent
 drawer = $("#drawing")
 
 get_cur_rel_pos = (event) ->
-        x = parseInt(event.pageX) - drawer.position().top
-        y = parseInt(event.pageY) - drawer.position().left
+        x = parseInt(event.pageX) - $("#drawing").offset().left
+        y = parseInt(event.pageY) - $("#drawing").offset().top
         return [x, y]
 
 
@@ -424,6 +424,11 @@ mk_table = ->
 #                 tab.
 
 mk_table()
+
+$('#drawing').css({
+    left: 1000,
+    top: 100
+})
 
 # config_table()
 clog 'init done'
