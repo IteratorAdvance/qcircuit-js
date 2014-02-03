@@ -1,4 +1,3 @@
-clog = console.log
 draw = SVG('drawing').size(360, 360)
 
 class Axis
@@ -8,7 +7,6 @@ class Axis
                         @dx.push @default
                 @sum = (x, y) -> x + y
                 this.upd_xs()
-                # clog "drdrd #{@dx}"
 
         upd_xs: () ->
                 @last = 0
@@ -21,7 +19,6 @@ class Axis
                         @last += i
                         @xs.push @last
                         cnt += 1
-                clog "xs: #{@xs}"
                         
         set_default: (@default) ->
 
@@ -60,7 +57,6 @@ X = new Axis 60, rows
 Y = new Axis 60, cols
 
 center = (x, y) ->
-        # clog "center #{x} #{y} #{X.center(x)} #{Y.center(y)}"
         return [X.center(x), Y.center(y)]
 
 class QCircuit_black_dot
@@ -202,12 +198,11 @@ QC = new QCircuit_component
 
 dashed_box = null
 locate_mouse = (x, y) ->
-        # clog "#{x} #{y} #{X.locate(x)} #{Y.locate(Y)}"
         return [Y.locate(y), X.locate(x)]
 
 window.cancel_op = () ->
         if QC.components.length == 0
-                clog 'empty operation!'
+           #     clog 'empty operation!'
         else 
                 QC.components = QC.components[0 .. -2]
                 QC.redraw()
@@ -223,14 +218,14 @@ class QueueEvent
 
         push: (args) ->
                 # clog "start #{@Q} #{@Q.length}"
-                clog "push: #{args}"
+               # clog "push: #{args}"
                 @Q.push args
                 if @Q.length >= @cnt and @func
                         # clog "start #{@Q} #{@cnt}"
                         @func(@Q[0 .. @cnt - 1])
                         @Q = []
                         @func = null
-                clog "Queue Length #{@Q.length}"
+                #clog "Queue Length #{@Q.length}"
                 $("#QLen").val("#{@Q.length} drd")
         bind: (@func, @cnt) ->
                 @Q = []
@@ -279,7 +274,7 @@ drawer.mousemove (event) ->
         x2 = X.right(Bx)
         y1 = Y.left(By)
         y2 = Y.right(By)
-        clog "#{Bx} #{By}"
+        #clog "#{Bx} #{By}"
 
         update_dashed_box(y1, x1, y2, x2)
 
@@ -391,44 +386,39 @@ class QCircuitGrid
                 return ret
 
 window.export_to_latex = () ->
-        clog "rc: #{rows} #{cols}"
+        #clog "rc: #{rows} #{cols}"
         grid = new QCircuitGrid rows, cols
         grid.imp_ops QC.components
         $('#latex-code').text grid.exp_tex()
 
 mk_table = ->
-        tab = $("#table")
+        tab = $('#table')
         rem = 20
         for i in [0 .. rows]
                 h = if i == 0 then rem else X.get(i)
-                s = "<tr height=#{h - 2}px>"
+                s = "<tr height=#{h}px>"
                 for j in [0 .. cols]
                         elem = if i == 0 then "th" else "td"
                         style = if j == 0 then 'style="border-right: 2px solid #CCC"' else ""
                         w = if j == 0 then rem else Y.get(j)
                         inner = if (i == 0 and j > 0) or (i > 0 and j == 0) then i + j else ""
-                        s += "<#{elem} width=#{w - 4}px #{style}> #{inner} </#{elem}>"
+                        s += "<#{elem} width=#{w}px #{style}> #{inner} </#{elem}>"
                 s += '</tr>'
                 tab.append(s)
-        tab.tableresizer
-                row_border: "2px solid #CCC"
-                col_border: "2px solid #CCC"
 
-        drawer.offset
-                top: tab.offset().top + rem + 5
-                left: tab.offset().left + rem + 5
+        tab.tableresizer
+                row_border: '2px solid #CCC'
+                col_border: '2px solid #CCC'
+
+        $('#drawing').css
+                top : rem + 3
+                left: rem + 14
+
 
 # config_table = ->
 #         tab = $("#table")
 #         tab.bind "mouseup", (event) ->
 #                 tab.
 
-mk_table()
-
-$('#drawing').css({
-    left: 1000,
-    top: 100
-})
-
-# config_table()
-clog 'init done'
+$ ->
+        mk_table()

@@ -3,12 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>Qcircuit Demo</title>
-    <script type="text/javascript" src="coffee-script.js"> </script>
     <script type="text/javascript" src="svg.min.js"></script>
     <script type="text/javascript" src="svg.foreignobject.js"></script>
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.tableresizer.js"></script>
     <style type="text/css">th {border-bottom: 3px solid #CCC;} </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.js"></script>
+	<link href="bootstrap.css" rel="stylesheet">
     <!-- <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 
 <script type="text/x-mathjax-config">
@@ -21,24 +22,41 @@
 
   </head>
   <body>
-    <table id="table"></table>
-    <div id="drawing"></div>
-    <script type="text/coffeescript" src="a.coffee"></script>
-    <!-- <script type="text/javascript" src="a.js"></script> -->
-    <button onclick="cancel_op()">Cancel</button>
-    <button onclick="add_black_dot()">Add Black dot</button>
-    <button onclick="add_white_dot()">Add White dot</button>
-    <button onclick="add_targ()">Add Target</button>
-    <button onclick="add_line()">Add Line</button>
-    <button onclick="add_qswap()">Add Qswap</button>
-    <button onclick="add_gate()">Add Gate</button>
-    <input id="gate"/>
-    <button onclick="add_multigate()">Add MultiGate</button>
-    <button onclick="export_to_latex()">Export to LaTeX</button>
+  	<div class="container">
+		<div class="container">
+			<div class="header">
+			<ul class="nav nav-pills pull-right">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#">Log in</a></li>
+				<li><a href="http://www.renren.com/383846771/profile">Contact</a></li>
+			</ul>
+			<h3 class="text-muted">Q-Circuit Editor</h3>
+		</div>
+   	</div>
+	  <div class="row marketing">
+		<div class="col-lg-6">
+			<table id="table"><div id="drawing" left = "100"></div></table>
+			
+			<script type="text/javascript" src="jquery.tableresizer.js"></script>
+			<script type="text/javascript" src="a.js"></script>
 
-    <div id="mouse-position">0</div>
+		</div>
+		<div class="col-lg-6">
+			<button class="btn btn-default" onclick="cancel_op()">Cancel</button>
+			<button class="btn btn-default" onclick="add_black_dot()">Add Black dot</button>
+			<button class="btn btn-default" onclick="add_white_dot()">Add White dot</button>
+			<button class="btn btn-default" onclick="add_targ()">Add Target</button>
+			<button class="btn btn-default" onclick="add_line()">Add Line</button>
+			<button class="btn btn-default" onclick="add_qswap()">Add Qswap</button>
+			<button class="btn btn-default" onclick="add_gate()">Add Gate</button>
+			<input class="form-control" id="gate"/>
+			<button class="btn btn-default" onclick="add_multigate()">Add MultiGate</button>
+			<button class="btn btn-default" onclick="export_to_latex()">Export to LaTeX</button>
+			<div id="mouse-position">0</div>
 
-    <pre id="latex-code"></pre>
-  </body>
+			<pre id="latex-code"></pre>
+		</div>
+
+   </body>
 </html>
 
